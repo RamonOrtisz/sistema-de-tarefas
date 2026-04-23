@@ -57,3 +57,50 @@ app.get('/tasks', async (req, res)=>{
     }
 
 })
+
+app.put('/tasks/:id', async (req, res)=> {
+    try {
+        const conection = await mysql.createConnection(dbConfig);
+
+        const { id } = req.params;
+        const { description, completed } = req.body;
+        const [result] = await conection.execute(
+            'UPDATE tasks SET description = ?, completed = ? WHERE id = ?',
+            [description, completed, id]
+        );
+        await conection.end();
+
+        if(result.affectedRows === 0) {
+            return res.status(404).json({error: 'Tarefa não encontrada'});
+        } 
+        res.json({message: 'Tarefa atualizada com sucesso'});
+
+
+
+    } catch (error) {
+        console.error('Erro ao atualizar tarefas: ', error);
+        res.status(500).json({error: 'Erro interno do servidor'});
+    }
+
+})
+
+app.delete('/tasks/:id', async (req, res)=> {
+    try {
+        const conection = await mysql.createConnection(dbConfig);
+        const {id} = req.params;
+        const [result] = await conection.execute(
+            'DELETE FROM tasks WHERE id = ?',
+            [id]
+        )
+        await conection.end()
+
+        if(result.affectedRows === 0) {
+            return res.status(404).json({error: 'Tarefa não encontrada'});
+        } 
+        res.json({message: 'Tarefa deletada com sucesso'});
+
+    } catch (error) {
+        console.error('Erro ao deletar tarefas: ', error);
+        res.status(500).json({error: 'Erro interno do servidor'});
+    }
+})
