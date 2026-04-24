@@ -6,6 +6,10 @@ const PORT = 3000;
 
 app.use(express.json());
 
+const path = require('path');
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 // config do DB
 const dbConfig = {
 
@@ -13,7 +17,7 @@ const dbConfig = {
     user: 'root',
     password: '102030abcdE#',
     database: 'todo_app',
-    // port: 3306
+    port: 3306
 }
 
 app.post('/tasks', async(req, res)=>{
@@ -36,13 +40,6 @@ app.post('/tasks', async(req, res)=>{
         res.status(500).json({error: 'Erro interno do servidor'});
     }
 })
-
-
-
-
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta http://localhost:${PORT}`);
-});
 
 app.get('/tasks', async (req, res)=>{
 
@@ -104,3 +101,11 @@ app.delete('/tasks/:id', async (req, res)=> {
         res.status(500).json({error: 'Erro interno do servidor'});
     }
 })
+
+
+
+
+
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta http://localhost:${PORT}`);
+});
