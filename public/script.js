@@ -27,7 +27,7 @@ async function loadTasks() {
                 `
                 :`
                 <button class="action toggle" onclick="toggleTask(${task.id}, ${task.completed})">Concluir</button>
-                <button class="action edit" onclick="editTask(${task.id}, ${task.description})"> Editar</button>
+                <button class="action edit" onclick="editTask(${task.id}, '${task.description}')"> Editar</button>
                 <button class="action delete" onclick="deleteTask(${task.id})" >Excluir</button>
                 `
             }
