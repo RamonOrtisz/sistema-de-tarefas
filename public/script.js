@@ -59,22 +59,50 @@ taskForm.addEventListener('submit', async (e) => {
 
 });
 
-
-
-
-
-
 //EDITAR tarefas
-// async function editTask(id, currentDescription) {
+async function editTask(id, currentDescription) {
+    const newDesc = prompt('Editar descrição: ', currentDescription);
 
-//     const newDesc = prompt('Editar descrição: ', currentDescription);
-//     if(newDesc && newDesc.trim() !== '') {
-//         await fetch(`${API_URL}/${id}`,{
+    if(newDesc && newDesc.trim() !== '') {
+        await fetch(`${API_URL}/${id}`,{
+                method: "PUT",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({description: newDesc, completed: false})
+            });
+        loadTasks();
+    }
+}
 
-//             method: "PUT",
-//             headers: {'Content-Type': 'application/json'},
-//             body: JSON.stringify({description: newDesc, completed: false})
-//         })
-//     }
+// REABRIR TAREFA
+async function toggleTask(id, completed) {
+    const res = await fetch(API_URL);
+    const tasks = await res.json();
 
-// }
+    const task = tasks.find(t => t.id === id);
+
+    if(!task) {
+        return;
+    }
+
+    await fetch(`${API_URL}/${id}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({description: task.description, completed: !completed})
+    });
+    loadTasks();
+}
+
+// EXCLUIR TAREFA
+async function deleteTask(id) {
+
+    if(confirm('Tem certeza que deseja excluir essa tarefa?')) {
+        await fetch(`${API_URL}/${id}`, {
+            method: 'DELETE'
+        });
+        loadTasks();
+    }
+
+}
+
+
+loadTasks();
