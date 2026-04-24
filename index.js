@@ -11,13 +11,14 @@ const path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
 
 // config do DB
+require('dotenv').config();
 const dbConfig = {
 
-    host: 'localhost',
-    user: 'root',
-    password: '102030abcdE#',
-    database: 'todo_app',
-    port: 3306
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT
 }
 
 app.post('/tasks', async(req, res)=>{
